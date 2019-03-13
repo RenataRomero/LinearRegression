@@ -4,11 +4,18 @@ import error
 import linear_regression as lr
 import data_creator as data
 import csv
-
+import os
 
 if __name__ == "__main__":
-    data.save_data()
-    data.save_train_and_test()
+
+    if os.path.isfile('./my_data.csv') == False:
+        print('\nNo existen los csv con los datos separados, se crearan nuevos dentro del mismo directorio.')
+        data.save_data()
+        data.save_train_and_test()
+    else:
+        print('\nYa existen los archivos csv con los datos separados, se utilizarán los mismos.')
+        print('\nSi se quiere utilizar datos diferentes por favor elimine los archivos de my_data.csv, my_test.csv y my_train.csv.')
+
     a_matrix = matrix.build_matrix(6,data.get_lines('my_train.csv'))
     a_t_matrix = matrix.build_t_matrix (data.get_lines('my_train.csv'), 6)
     y_matrix = matrix.build_y_matrix(1,(data.get_lines('my_train.csv')), 'my_train.csv')
@@ -22,10 +29,10 @@ if __name__ == "__main__":
         AT_Y = matrix.multiply_matrix(a_t_matrix, y_matrix)
         b = lr.gauss(A_AT, AT_Y)
 
-        print('Este es el vector b:')
+        print('\nEste es el vector b:')
 
         for i in range(len(b)):
-            print('b' + str(i) + ': ' + str(b[i]))
+            print('b' + str(i) + ': ' + str(b[i][0]))
 
         y_predictions = []
 
